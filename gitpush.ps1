@@ -1,6 +1,8 @@
 param(
     [Parameter(Mandatory = $false)]
-    [string]$CommitMessage = "Automated commit"
+    [string]$CommitMessage = "Automated commit",
+    [Parameter(Mandatory = $false)]
+    [string]$GITHUB_REPOSITORY
 )
 
 # Verify Git is installed
@@ -12,6 +14,14 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
 # Verify this is a Git repository
 if (-not (Test-Path ".git")) {
     Write-Error "The specified folder is not a Git repository."
+    exit 1
+}
+
+Write-Host "Checking if github repository is set..."
+if (-not (git remote get-url origin)) {
+    Write-Error "No remote repository is set. Please set a remote repository before pushing."
+    Write-Host "Setting the remote repository to 'origin'..."
+    gh repo create $GITHUB_REPOSITORY --public --source=. --remote=origin --push
     exit 1
 }
 
