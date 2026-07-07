@@ -37,3 +37,13 @@ Note: This will impact Vite dev & build performances.
 - Python
 - FastAPI
 - Uvicorn
+
+## Starting guide
+
+### Publishing to Github
+- To publish the code changes on windows machine, run in the terminal using PowerShell the:
+``` gitpush.ps1 ```
+
+### Running code
+
+

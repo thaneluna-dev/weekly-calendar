@@ -28,6 +28,25 @@ if (-not (git remote get-url origin)) {
 Write-Host "Checking repository status..."
 git status
 
+$gitignorePath = ".gitignore"
+
+if (-not (Test-Path $gitignorePath)) {
+    New-Item -ItemType File -Path $gitignorePath -Force | Out-Null
+}
+
+$gitignoreContent = Get-Content $gitignorePath -ErrorAction SilentlyContinue
+
+if ($gitignoreContent -notcontains ".env") {
+    Add-Content -Path $gitignorePath -Value "`n# Environment variables`n.env"
+    Write-Host "Added .env to .gitignore."
+}
+else {
+    Write-Host ".env is already ignored."
+}
+
+# If .env was previously tracked, stop tracking it while keeping the local file
+git rm --cached .env 2>$null
+
 # Stage all changes
 Write-Host "`nAdding changes..."
 git add .
