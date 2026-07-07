@@ -16,7 +16,7 @@ body {
 
 h1,
 h2 {
-  font-family: var(--heading);
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
   font-weight: 500;
   color: var(--text-h);
 }
@@ -58,14 +58,30 @@ code {
   background: var(--code-bg);
 }
 
-.navigation-bar {
+.navigation-bar, ul {
   background-color: black;
-  display: flex;
+  display: inline-flex;
   padding: 20px;
   justify-content: flex-end;
   ul {
     gap: 20px;
     padding: 0;
-    margin: 0;    
+    margin: 0;
+    list-style: none;
   }
+}
+
+.button-transparent {
+  background-color: transparent;
+  border-style: none;
+  cursor: pointer;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-items: flex-start;
+  height: 100%;
+  padding: 50px;
 }
