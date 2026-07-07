@@ -45,5 +45,6 @@ Note: This will impact Vite dev & build performances.
 ``` gitpush.ps1 ```
 
 ### Running code
-
-
+```
+Npm run dev // Starts the local host server to view in browser  
+```
