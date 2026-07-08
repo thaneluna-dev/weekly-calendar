@@ -18,6 +18,11 @@ export function NavigationBar() {
     setAnchorEl(null);
   };
 
+  const handlePrint = () => {
+    window.print();
+    handleClose();
+  };
+
   return (
     <nav className="navigation-bar">
       <ul>
@@ -46,7 +51,7 @@ export function NavigationBar() {
             <Person color="white" size={20} />
             My account
             </MenuItem>
-            <MenuItem onClick={handleClose} sx={{color: "white", gap: "10px"}}>
+            <MenuItem onClick={handlePrint} sx={{color: "white", gap: "10px"}}>
             <Printer color="white" size={20} />
             Print
             </MenuItem>

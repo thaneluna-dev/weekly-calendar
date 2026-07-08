@@ -85,3 +85,12 @@ code {
   height: 100%;
   padding: 50px;
 }
+
+.calendar {
+  background-color: black;
+  display: flex;
+  align-items: start;
+  justify-items: flex-start;
+  align-content: start;
+  justify-content: flex-start;
+}
