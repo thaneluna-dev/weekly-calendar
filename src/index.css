@@ -94,3 +94,9 @@ code {
   align-content: start;
   justify-content: flex-start;
 }
+
+.events {
+  font-size:large;
+  font-weight:lighter;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

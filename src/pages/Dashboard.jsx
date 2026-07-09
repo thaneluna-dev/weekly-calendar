@@ -1,5 +1,5 @@
 import Container from "@mui/material/Container";
-import { Box, Button, Grid, Input, Modal } from "@mui/material";
+import { Box, Button, Grid, Input, Modal, TextareaAutosize } from "@mui/material";
 import { useState } from "react";
 
 export default function Dashboard() {
@@ -40,7 +40,12 @@ export default function Dashboard() {
   const handleEventClick = (index) => {
     // Modal for handling events pop up
     setOpen(true);
-    setcurrentEventDate(index)
+    setcurrentEventDate(index);
+  };
+
+  const handleOnChange = (event) => {
+    // event.target.value
+    //TODO - Needs to implement to save to backend in fastapi python
   };
 
   return (
@@ -59,7 +64,7 @@ export default function Dashboard() {
           {Object.values(days).map((day, index) => (
             <Grid
               key={index}
-              size="auto"
+              size="grow"
               sx={{
                 height: "100%",
                 backgroundColor: "lightgray",
@@ -84,7 +89,7 @@ export default function Dashboard() {
               >
                 <h2 style={{ paddingBottom: 10 }}>{day}</h2>
                 <Button
-                  onClick={() => handleEventClick(index) }
+                  onClick={() => handleEventClick(index)}
                   variant="contained"
                   color="primary"
                   sx={{ marginBottom: 3 }}
@@ -92,15 +97,20 @@ export default function Dashboard() {
                   Add Event
                 </Button>
                 {/* Add your event list or other content here */}
-                <div>
+                <p className="events">
                   {events[index].map((event, eventIndex) => (
                     <div key={eventIndex}>{event}</div>
                   ))}
-                </div>
+                </p>
               </Box>
             </Grid>
           ))}
-          <Modal open={open} onClose={handleClose} aria-labelledby="modal-title" aria-describedby="modal-description">
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
+          >
             <Box
               sx={{
                 position: "absolute",
@@ -115,7 +125,12 @@ export default function Dashboard() {
               }}
             >
               <h2>Adding to event {days[currentEventDate]}</h2>
-                <Input placeholder="Event Name" />          
+              <TextareaAutosize
+                aria-label="empty textarea"
+                placeholder="Empty"
+                style={{ width: 200 }}
+                onChange={(e) => handleOnChange(e) }
+              />
             </Box>
           </Modal>
         </Grid>
