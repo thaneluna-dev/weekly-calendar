@@ -9,7 +9,7 @@ class Tasks(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
-    date = Column(Date, nullable=False)
+    taskdate = Column(Date, nullable=False)
     dateindex = Column(Integer, nullable=False)
     
 Base.metadata.create_all(bind=storage_engine)
