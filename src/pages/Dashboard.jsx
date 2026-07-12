@@ -1,3 +1,4 @@
+import { EditModal } from "../components/EditModal";
 import Container from "@mui/material/Container";
 import {
   Box,
@@ -50,11 +51,6 @@ export default function Dashboard() {
     }
   }
 
-  let currentDate = new Date().toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
   let days = {};
 
   for (let i = 0; i < 7; i++) {
@@ -76,11 +72,14 @@ export default function Dashboard() {
     };
   }
 
+  {/* // 2. Handle Events ---- */}
+
+  {/* //// 2.1 Handle Close Events ---- */}
   const handleClose = () => {
     setOpen(false);
     seteditopen(false);
   };
-
+{/* //// 2.2 Handle Event Clicks Events ---- */}
   const handleEventClick = (index) => {
     // Modal for handling events pop up
     setOpen(true);
@@ -88,12 +87,14 @@ export default function Dashboard() {
     setcurrentDateDisplay(days[index].display);
     setcurrentEventDate(days[index].value);
   };
-
+  
+  {/* //// 2.3 Handle Add Task ---- */}
   const handleAddTask = async () => {
     if (taskName == undefined || taskName == "") {
       console.log("no task name");
       return;
     }
+
     try {
       const response = await fetch(
         "http://localhost:8000/api/v1/tasks/createtasks",
@@ -123,12 +124,14 @@ export default function Dashboard() {
     }
   };
 
+    {/* //// 2.4 Handle On Change Task ---- */}
   const handleOnChange = (event) => {
     // event.target.value
     setTaskName(event.target.value);
     //TODO - Needs to implement to save to backend in fastapi python
   };
 
+  {/* //// 2.5 Handle On Edit Task ---- */}
   const handleEdit = (task) => {
     // Handle Task Edit List
     seteditopen(true);
@@ -242,47 +245,8 @@ export default function Dashboard() {
               </Button>
             </Box>
           </Modal>
-          <Modal
-            open={editopen}
-            onClose={handleClose}
-            aria-labelledby="modal-title"
-            aria-describedby="modal-description"
-          >
-            <Box
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: 400,
-                bgcolor: "background.paper",
-                border: "2px solid #000",
-                boxShadow: 24,
-                p: 4,
-                display: "grid",
-              }}
-            >
-              <h2>Editing Task {currentEditTask.taskdate}</h2>
-              <TextareaAutosize
-                aria-label="empty textarea"
-                placeholder="Empty"
-                style={{ width: "100%", marginTop: 10, height: 50 }}
-                onChange={(e) => handleOnChange(e)}
-                value={currentEditTask.title}
-              />
-              <Button
-                variant="outlined"
-                sx={{
-                  width: "auto",
-                  marginTop: 4,
-                  justifySelf: "right",
-                  textAlign: "right",
-                }}
-              >
-                Update Task
-              </Button>
-            </Box>
-          </Modal>
+          {/* // 3. Modal Editing Task ---- */}
+          <EditModal currentEditTask={currentEditTask} editopen={editopen} handleclose={handleClose} />
         </Grid>
       </Box>
     </Container>
