@@ -45,6 +45,15 @@ Note: This will impact Vite dev & build performances.
 ``` gitpush.ps1 ```
 
 ### Running code
+1. In one terminal window launch the command: ```Npm run dev ```
+2. In another terminal run the commands:
+- For windows
 ```
-Npm run dev // Starts the local host server to view in browser  
+.venv/Scripts/Activate.ps1
+uvicorn backend.main:app --reload // runs the backend fastapi router
+```
+- For mac
+```
+source .venv/bin/activate
+uvicorn backend.main:app --reload // runs the backend fastapi router
 ```
