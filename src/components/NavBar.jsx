@@ -1,5 +1,5 @@
 import { Person, MenuButton } from "react-bootstrap-icons";
-import { Printer } from "react-bootstrap-icons";
+import { Printer, Receipt } from "react-bootstrap-icons";
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -54,6 +54,10 @@ export function NavigationBar() {
             <MenuItem onClick={handlePrint} sx={{color: "white", gap: "10px"}}>
             <Printer color="white" size={20} />
             Print
+            </MenuItem>
+            <MenuItem sx={{color: "white", gap: "10px"}}>
+            <Receipt color="white" size={20} />
+            Get Report
             </MenuItem>
           </Menu>
         </li>
