@@ -42,6 +42,7 @@ export default function Dashboard() {
       console.error(error);
     }
   }
+
   let currentDate = new Date().toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -68,16 +69,6 @@ export default function Dashboard() {
     };
   }
 
-  let events = {
-    0: ["Event 1"],
-    1: ["Event 2"],
-    2: ["Event 3"],
-    3: ["Event 4"],
-    4: ["Event 5"],
-    5: ["Event 6"],
-    6: ["Event 7"],
-  };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -95,7 +86,9 @@ export default function Dashboard() {
       console.log("no task name");
       return;
     }
+    console.log('here');
     try {
+      console.log('here');
       const response = await fetch(
         "http://localhost:8000/api/v1/tasks/createtasks",
         {
