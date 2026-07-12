@@ -2,6 +2,7 @@ import Container from "@mui/material/Container";
 import {
   Box,
   Button,
+  CircularProgress,
   Grid,
   Input,
   Modal,
@@ -11,11 +12,14 @@ import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const [open, setOpen] = useState(false);
+  const [editopen, seteditopen] = useState(false);
   const [currentDateIndex, setcurrentDateIndex] = useState();
   const [taskName, setTaskName] = useState();
   const [currentEventDate, setcurrentEventDate] = useState();
   const [currentDateDisplay, setcurrentDateDisplay] = useState();
   const [taskData, settaskData] = useState([]);
+  const [currentEditTask, setcurrentEditTask] = useState([]);
+  const [loadingTasks, setloadingTasks] = useState();
 
   useEffect(() => {
     getTasks();
@@ -23,6 +27,7 @@ export default function Dashboard() {
 
   async function getTasks() {
     try {
+      setloadingTasks(true);
       const response = await fetch("http://localhost:8000/api/v1/tasks", {
         method: "GET",
         headers: {
@@ -40,6 +45,8 @@ export default function Dashboard() {
       settaskData(tasks);
     } catch (error) {
       console.error(error);
+    } finally {
+      setloadingTasks(false);
     }
   }
 
@@ -71,6 +78,7 @@ export default function Dashboard() {
 
   const handleClose = () => {
     setOpen(false);
+    seteditopen(false);
   };
 
   const handleEventClick = (index) => {
@@ -86,9 +94,7 @@ export default function Dashboard() {
       console.log("no task name");
       return;
     }
-    console.log('here');
     try {
-      console.log('here');
       const response = await fetch(
         "http://localhost:8000/api/v1/tasks/createtasks",
         {
@@ -121,6 +127,12 @@ export default function Dashboard() {
     // event.target.value
     setTaskName(event.target.value);
     //TODO - Needs to implement to save to backend in fastapi python
+  };
+
+  const handleEdit = (task) => {
+    // Handle Task Edit List
+    seteditopen(true);
+    setcurrentEditTask(task);
   };
 
   return (
@@ -173,10 +185,18 @@ export default function Dashboard() {
                 </Button>
                 {/* Add your event list or other content here */}
                 <div className="events">
-                  {taskData.filter((task) => task.dateindex === index).map((task) => 
-                  (
-                    <div key={task.id}>{task.title}</div>
-                  ))}
+                  {loadingTasks ? (
+                    <CircularProgress aria-label="Loading…" />
+                  ) : (
+                    taskData
+                      .filter((task) => task.dateindex === index)
+                      .map((task) => (
+                        <div key={task.id}>
+                          {task.title}
+                          <Button onClick={() => handleEdit(task)}>Edit</Button>
+                        </div>
+                      ))
+                  )}
                 </div>
               </Box>
             </Grid>
@@ -219,6 +239,47 @@ export default function Dashboard() {
                 onClick={handleAddTask}
               >
                 Create Task
+              </Button>
+            </Box>
+          </Modal>
+          <Modal
+            open={editopen}
+            onClose={handleClose}
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
+          >
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 400,
+                bgcolor: "background.paper",
+                border: "2px solid #000",
+                boxShadow: 24,
+                p: 4,
+                display: "grid",
+              }}
+            >
+              <h2>Editing Task {currentEditTask.taskdate}</h2>
+              <TextareaAutosize
+                aria-label="empty textarea"
+                placeholder="Empty"
+                style={{ width: "100%", marginTop: 10, height: 50 }}
+                onChange={(e) => handleOnChange(e)}
+                value={currentEditTask.title}
+              />
+              <Button
+                variant="outlined"
+                sx={{
+                  width: "auto",
+                  marginTop: 4,
+                  justifySelf: "right",
+                  textAlign: "right",
+                }}
+              >
+                Update Task
               </Button>
             </Box>
           </Modal>
