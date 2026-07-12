@@ -1,28 +1,73 @@
 import Container from "@mui/material/Container";
-import { Box, Button, Grid, Input, Modal, TextareaAutosize } from "@mui/material";
-import { useState } from "react";
+import {
+  Box,
+  Button,
+  Grid,
+  Input,
+  Modal,
+  TextareaAutosize,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const [open, setOpen] = useState(false);
+  const [currentDateIndex, setcurrentDateIndex] = useState();
+  const [taskName, setTaskName] = useState();
   const [currentEventDate, setcurrentEventDate] = useState();
+  const [currentDateDisplay, setcurrentDateDisplay] = useState();
+  const [taskData, settaskData] = useState([]);
 
+  useEffect(() => {
+    getTasks();
+  }, []);
+
+  async function getTasks() {
+    try {
+      const response = await fetch("http://localhost:8000/api/v1/tasks", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch tasks");
+      }
+
+      const tasks = await response.json();
+
+      console.log(tasks);
+      settaskData(tasks);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   let currentDate = new Date().toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
   let days = {};
+
   for (let i = 0; i < 7; i++) {
     const date = new Date();
-    if (i == 0 && date.getDay() === 0) {
-      date.setDate(date.getDate() - 6);
+
+    if (i === 0 && date.getDay() === 0) {
+      date.setDate(date.getDate());
     } else {
       date.setDate(date.getDate() - date.getDay() + i);
     }
-    const options = { weekday: "long", month: "long", day: "numeric" };
-    const weekdate = date.toLocaleDateString("en-US", options);
-    days[i] = weekdate;
+
+    days[i] = {
+      display: date.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+      }),
+      value: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`,
+    };
   }
+
   let events = {
     0: ["Event 1"],
     1: ["Event 2"],
@@ -40,11 +85,48 @@ export default function Dashboard() {
   const handleEventClick = (index) => {
     // Modal for handling events pop up
     setOpen(true);
-    setcurrentEventDate(index);
+    setcurrentDateIndex(index);
+    setcurrentDateDisplay(days[index].display);
+    setcurrentEventDate(days[index].value);
+  };
+
+  const handleAddTask = async () => {
+    if (taskName == undefined || taskName == "") {
+      console.log("no task name");
+      return;
+    }
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/v1/tasks/createtasks",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: taskName,
+            taskdate: currentEventDate, // e.g. "2026-07-11"
+            dateindex: currentDateIndex, // e.g. 0
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to create task");
+      }
+
+      const newTask = await response.json();
+      console.log(newTask);
+
+      setTaskName("");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleOnChange = (event) => {
     // event.target.value
+    setTaskName(event.target.value);
     //TODO - Needs to implement to save to backend in fastapi python
   };
 
@@ -87,7 +169,7 @@ export default function Dashboard() {
                   textAlign: "left",
                 }}
               >
-                <h2 style={{ paddingBottom: 10 }}>{day}</h2>
+                <h2 style={{ paddingBottom: 10 }}>{day.display}</h2>
                 <Button
                   onClick={() => handleEventClick(index)}
                   variant="contained"
@@ -97,11 +179,12 @@ export default function Dashboard() {
                   Add Event
                 </Button>
                 {/* Add your event list or other content here */}
-                <p className="events">
-                  {events[index].map((event, eventIndex) => (
-                    <div key={eventIndex}>{event}</div>
+                <div className="events">
+                  {taskData.filter((task) => task.dateindex === index).map((task) => 
+                  (
+                    <div key={task.id}>{task.title}</div>
                   ))}
-                </p>
+                </div>
               </Box>
             </Grid>
           ))}
@@ -122,15 +205,28 @@ export default function Dashboard() {
                 border: "2px solid #000",
                 boxShadow: 24,
                 p: 4,
+                display: "grid",
               }}
             >
-              <h2>Adding to event {days[currentEventDate]}</h2>
+              <h2>Adding to event {currentDateDisplay}</h2>
               <TextareaAutosize
                 aria-label="empty textarea"
                 placeholder="Empty"
-                style={{ width: 200 }}
-                onChange={(e) => handleOnChange(e) }
+                style={{ width: "100%", marginTop: 10, height: 50 }}
+                onChange={(e) => handleOnChange(e)}
               />
+              <Button
+                variant="outlined"
+                sx={{
+                  width: "auto",
+                  marginTop: 4,
+                  justifySelf: "right",
+                  textAlign: "right",
+                }}
+                onClick={handleAddTask}
+              >
+                Create Task
+              </Button>
             </Box>
           </Modal>
         </Grid>

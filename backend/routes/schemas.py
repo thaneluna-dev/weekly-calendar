@@ -4,7 +4,7 @@ from typing import Optional
 from datetime import date
 
 # Creates a new issue with required fields
-class create_tasks(BaseModel):
+class CreateTask(BaseModel):
     
     title: str = Field(min_length=2, max_length=100, example="Issue Title")
     taskdate: date

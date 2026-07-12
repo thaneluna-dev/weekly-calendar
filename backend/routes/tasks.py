@@ -1,6 +1,6 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from backend.routes.schemas import create_tasks, user_response
+from backend.routes.schemas import CreateTask, user_response
 from backend.routes.storage import get_db
 from sqlalchemy.orm import Session
 from backend.models.tasksmodels import Tasks
@@ -16,7 +16,7 @@ async def get_tasks(db:Session=Depends(get_db)):
     return db.query(Tasks).all()
 
 @router.post("/createtasks", response_model=user_response, status_code=status.HTTP_201_CREATED)
-async def create_tasks(task: create_tasks, db:Session=Depends(get_db)):
+async def create_tasks(task: CreateTask, db:Session=Depends(get_db)):
     new_task = Tasks(**task.dict())
     db.add(new_task)
     db.commit()
@@ -25,7 +25,7 @@ async def create_tasks(task: create_tasks, db:Session=Depends(get_db)):
 
 # Update method for Tasks
 @router.put("/updatetasks/{task_id}", response_model=user_response)
-async def update_tasks(task_id: int, updated_task: create_tasks, db: Session = Depends(get_db)):
+async def update_tasks(task_id: int, updated_task: CreateTask, db: Session = Depends(get_db)):
     task = db.query(Tasks).filter(Tasks.id == task_id).first()
     if not task:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tasks not found for date")
