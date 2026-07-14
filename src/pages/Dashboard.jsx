@@ -42,7 +42,6 @@ export default function Dashboard() {
 
       const tasks = await response.json();
 
-      console.log(tasks);
       settaskData(tasks);
     } catch (error) {
       console.error(error);
@@ -116,7 +115,6 @@ export default function Dashboard() {
       }
 
       const newTask = await response.json();
-      console.log(newTask);
 
       setTaskName("");
     } catch (error) {

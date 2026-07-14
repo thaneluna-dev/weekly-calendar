@@ -1,5 +1,19 @@
 import { Modal, Box, TextareaAutosize, Button } from "@mui/material";
-export const EditModal = ({currentEditTask, editopen, handleclose}) => {
+import { useState, useEffect } from "react";
+
+export const EditModal = ({ currentEditTask, editopen, handleclose }) => {
+  const [taskName, setTaskName] = useState("");
+
+  useEffect(() => {
+    setTaskName(currentEditTask?.title || "");
+  }, [currentEditTask]);
+
+  const handleOnChange = (event) => {
+    setTaskName(event.target.value);
+
+    // TODO - Save to backend
+  };
+
   return (
     <Modal
       open={editopen}
@@ -22,13 +36,13 @@ export const EditModal = ({currentEditTask, editopen, handleclose}) => {
         }}
       >
         <h2>Editing Task</h2>
+
         <TextareaAutosize
-          aria-label="empty textarea"
-          placeholder="Empty"
           style={{ width: "100%", marginTop: 10, height: 50 }}
-          onChange={(e) => handleOnChange(e)}
-          value={currentEditTask.title}
+          value={taskName}
+          onChange={handleOnChange}
         />
+
         <Button
           variant="outlined"
           sx={{
