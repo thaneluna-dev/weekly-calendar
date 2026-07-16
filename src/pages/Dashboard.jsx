@@ -21,6 +21,7 @@ export default function Dashboard() {
   const [taskData, settaskData] = useState([]);
   const [currentEditTask, setcurrentEditTask] = useState([]);
   const [loadingTasks, setloadingTasks] = useState();
+  const API = import.meta.env.VITE_API_URL
 
   useEffect(() => {
     getTasks();
@@ -29,7 +30,7 @@ export default function Dashboard() {
   async function getTasks() {
     try {
       setloadingTasks(true);
-      const response = await fetch("http://localhost:8000/api/v1/tasks", {
+      const response = await fetch(`${API}/api/v1/tasks`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -96,7 +97,7 @@ export default function Dashboard() {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/v1/tasks/createtasks",
+        `${API}/api/v1/tasks/createtasks`,
         {
           method: "POST",
           headers: {
