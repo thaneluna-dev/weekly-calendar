@@ -5,7 +5,11 @@ from sqlalchemy.orm import sessionmaker, Session
 from pydantic import BaseModel
 from typing import Optional, List
 
-engine = create_engine("sqlite:///./issues.db", connect_args={"check_same_thread": False})
+import os
+
+DATABASE_URL = os.environ("DATABASE_URL")
+
+engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
