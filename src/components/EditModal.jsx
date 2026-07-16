@@ -1,13 +1,13 @@
 import { Modal, Box, TextareaAutosize, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 
-export const EditModal = ({ currentEditTask, editopen, handleclose, task_id }) => {
+export const EditModal = ({ currentEditTask, editopen, handleclose, task_id, API }) => {
   const [taskName, setTaskName] = useState("");
 
   const handleUpdate = async (e) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/v1/tasks/updatetasks/${currentEditTask.id}`,
+        `${API}/api/v1/tasks/updatetasks/${currentEditTask.id}`,
         {
           method: "PUT",
           headers: {

@@ -247,7 +247,7 @@ export default function Dashboard() {
             </Box>
           </Modal>
           {/* // 3. Modal Editing Task ---- */}
-          <EditModal currentEditTask={currentEditTask} editopen={editopen} handleclose={handleClose} />
+          <EditModal currentEditTask={currentEditTask} editopen={editopen} handleclose={handleClose} API={API} />
         </Grid>
       </Box>
     </Container>
