@@ -7,7 +7,7 @@ from typing import Optional, List
 
 import os
 
-DATABASE_URL = os.environ("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(DATABASE_URL)
 
