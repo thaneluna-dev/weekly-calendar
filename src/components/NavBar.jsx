@@ -56,6 +56,7 @@ export function NavigationBar() {
             Print
             </MenuItem>
             <MenuItem sx={{color: "white", gap: "10px"}}>
+            {/* Get report button needs to navigate to /reports so it is a current week list of the tasks that is available to copy */}
             <Receipt color="white" size={20} />
             Get Report
             </MenuItem>

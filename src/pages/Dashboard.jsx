@@ -193,7 +193,9 @@ export default function Dashboard() {
                       .filter((task) => task.dateindex === index)
                       .map((task) => (
                         <div key={task.id}>
-                          {task.title}
+                          <div style={{whiteSpace: "pre-wrap"}}>
+                            {task.title}
+                          </div>
                           <Button onClick={() => handleEdit(task)}>Edit</Button>
                         </div>
                       ))

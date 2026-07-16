@@ -1,8 +1,35 @@
 import { Modal, Box, TextareaAutosize, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 
-export const EditModal = ({ currentEditTask, editopen, handleclose }) => {
+export const EditModal = ({ currentEditTask, editopen, handleclose, task_id }) => {
   const [taskName, setTaskName] = useState("");
+
+  const handleUpdate = async (e) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/v1/tasks/updatetasks/${currentEditTask.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: taskName
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        console.log(taskName);
+        throw new Error("Failed to update task");
+      }
+
+      console.log("updated task");
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     setTaskName(currentEditTask?.title || "");
@@ -10,7 +37,6 @@ export const EditModal = ({ currentEditTask, editopen, handleclose }) => {
 
   const handleOnChange = (event) => {
     setTaskName(event.target.value);
-
     // TODO - Save to backend
   };
 
@@ -51,6 +77,7 @@ export const EditModal = ({ currentEditTask, editopen, handleclose }) => {
             justifySelf: "right",
             textAlign: "right",
           }}
+          onClick={handleUpdate}
         >
           Update Task
         </Button>

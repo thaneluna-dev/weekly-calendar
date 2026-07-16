@@ -6,14 +6,14 @@ from datetime import date
 # Creates a new issue with required fields
 class CreateTask(BaseModel):
     
-    title: str = Field(min_length=2, max_length=100, example="Issue Title")
-    taskdate: date
+    title: str = Field(min_length=2, example="Issue Title")
+    taskdate: Optional[date] = date
     dateindex: int
     
 
 # Want every field to be optional for update, so that user can update any field they want
-class update_tasks(BaseModel):
-    title: Optional[str] = Field(None, min_length=2, max_length=100, example="Issue Title")
+class UpdateTasks(BaseModel):
+    title: Optional[str] = Field(None, min_length=2, example="Issue Title")
 
 class user_response(BaseModel):
     id: int
