@@ -191,7 +191,7 @@ export default function Dashboard() {
                     <CircularProgress aria-label="Loading…" />
                   ) : (
                     taskData
-                      .filter((task) => task.dateindex === index)
+                      .filter((task) => task.dateindex === index && task.taskdate === day.value)
                       .map((task) => (
                         <div key={task.id}>
                           <div style={{whiteSpace: "pre-wrap"}}>
