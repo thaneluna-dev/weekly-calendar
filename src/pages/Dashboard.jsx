@@ -55,7 +55,6 @@ export default function Dashboard() {
 
   for (let i = 0; i < 7; i++) {
     const date = new Date();
-
     if (i === 0 && date.getDay() === 0) {
       date.setDate(date.getDate());
     } else {
